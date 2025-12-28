@@ -70,11 +70,13 @@ int main() {
       "rpicam-vid",
       "--width", std::to_string(WIDTH),
       "--height", std::to_string(HEIGHT),
-      "--mode", "1632:1224:10",
       "--framerate", std::to_string(FRAMERATE),
+
       "--codec", CODEC,
+      "--bitrate", "6000000",
       "--profile", "high",
       "--level", "4.1",
+      "--intra", std::to_string(FRAMERATE * 2),
 
       "--segment", "1000", // TODO: change to something like 120000
       "--timeout", "0",
@@ -115,7 +117,7 @@ int main() {
   // wait for 17 seconds for the purpose of testing
   std::this_thread::sleep_for(std::chrono::seconds(17));
   std::cout << "Attempting to kill rpicam-vid" << std::endl;
-  if (kill(rpicam_pid, SIGKILL) == -1)
+  if (kill(rpicam_pid, SIGINT) == -1)
     std::cout << "Error killing rpicam-vid!" << std::endl;
 
   int rpicam_status = 0;
@@ -129,6 +131,7 @@ int main() {
   std::cout << "Flight recording finished!\nRunning ffmpeg..." << std::endl;
 
   build_file_list(".");
+  system("./fix_segments.sh");
   system("ffmpeg -f concat -safe 0 -i list.txt -c copy flight.mkv");
 
   return 0;
