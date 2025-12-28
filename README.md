@@ -11,3 +11,13 @@ Requires `libcamera`, `libgpiod` (both for raspberry pi), `ffmpeg`, `meson`, and
 
 ### Compilation
 First, create the build files with `meson build`, then enter the `build` directory; `cd build`, and run `ninja`.
+
+### Service setup
+- Needs to have the binary installed to `/usr/local/bin/biomecam` (`sudo install -m 0755 biomecam /usr/local/bin/biomecam`)
+- Requires the directory `/var/lib/biomecam` to exist (where flight video is recorded to)
+- The file `biomecam.service` needs to be copied to `/etc/systemd/system/`
+- The service script should be updated if the user/group using the service is not 'starr' (this is the name chosen for the development raspberry pi)
+- The user running the script should be in the video and gpio groups (`sudo usermod -aG video,gpio <name>`)
+- Enable and start the script with `systemctl enable --now biomecam`
+
+Note that the version of code here is for testing purposes, there are TODOs that outline what would need to change if we wanted this to actually work with respect to sensing input on GPIOs. Right now, we skip sensing input and go straight to recording, and after a simulated delay, recording is stopped (again, not based on GPIO input).
