@@ -127,13 +127,8 @@ int main() {
     std::fprintf(stderr, "rpicam-vid failed, status is %d\n", rpicam_status);
 
   // parent
-
-  std::cout << "Flight recording finished!\nRunning ffmpeg..." << std::endl;
-
+  std::cout << "Flight finished, building file list..." << std::endl;
   build_file_list(".");
-  system("./fix_segments.sh");
-  system("ffmpeg -f concat -safe 0 -i list.txt -c copy flight.mkv");
-
   return 0;
 }
 
@@ -144,7 +139,6 @@ static void build_file_list(const fs::path& dir) {
     if (p.path().extension() == ".mkv" &&
        (p.path().filename().string().rfind("flight_", 0) == 0)) {
         files.push_back(p.path());
-        std::cout << "found file " << p.path().filename().string() << std::endl;
       }
   }
 
@@ -156,7 +150,6 @@ static void build_file_list(const fs::path& dir) {
 
   std::ofstream file_list("list.txt");
   for (auto& f : files) {
-    std::cout << "filename added: " << f.string() << std::endl;
     file_list << "file '" << f.string() << "'\n";
   }
 }
