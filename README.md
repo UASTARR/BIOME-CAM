@@ -20,4 +20,6 @@ First, create the build files with `meson build`, then enter the `build` directo
 - The user running the script should be in the video and gpio groups (`sudo usermod -aG video,gpio <name>`)
 - Enable and start the script with `systemctl enable --now biomecam`
 
+After the flight, the user can ssh into the raspberry pi, copy the contents of `/var/lib/biomecam` (`cp /var/lib/biomecam/* .`) into the source directory, and run `./concat_video.sh` to create `flight.mkv`.
+
 Note that the version of code here is for testing purposes, there are TODOs that outline what would need to change if we wanted this to actually work with respect to sensing input on GPIOs. Right now, we skip sensing input and go straight to recording, and after a simulated delay, recording is stopped (again, not based on GPIO input).
