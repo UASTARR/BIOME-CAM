@@ -57,6 +57,7 @@ int main() {
 
   std::cout << "Waiting for rising edge on GPIO 23" << std::endl;
 
+  // TODO: Uncomment
   // req.wait_edge_events((std::chrono::nanoseconds)-1);
 
   std::cout << "Event detected!" << std::endl;
